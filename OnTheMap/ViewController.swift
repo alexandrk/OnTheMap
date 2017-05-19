@@ -9,14 +9,36 @@
 import UIKit
 
 class ViewController: UIViewController {
-
-    @IBOutlet weak var btnUdacityLogin: UIButton!
-    @IBOutlet weak var tvDontHaveAccount: UITextView!
+    
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var txtEmail: UITextField!
     @IBOutlet weak var txtPassword: UITextField!
+    @IBOutlet weak var btnUdacityLogin: UIButton!
+    @IBOutlet weak var tvDontHaveAccount: UITextView!
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var containerView: UIView!
+    
+    override func viewWillAppear(_ animated: Bool) {
+        // Subscribe to keyboard events (keyboardWill[Show|Hide]), used to shift view
+        // to display the bottom text field, while entering text into it
+        subscribeToKeyboardNotifications()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        //Clean up
+        unsubscribeFromKeyboardNotifications()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Disables scroll view (only enabled, when keyboard is shown)
+        self.scrollView.isScrollEnabled = false
+        
+        // Setup input fields delegates (needed for keyboard show/hide events)
+        txtEmail.delegate = self
+        txtPassword.delegate = self
         
         // Resetting the border style for text fields back to rounded corners,
         // done programatically, since we have custom text fields height
@@ -33,7 +55,7 @@ class ViewController: UIViewController {
         
         // Creating a link for a given part of the string
         dontHaveAccountAS.addAttribute(NSLinkAttributeName,
-                                       value: Constants.UdacityCreateAccountURL,
+                                       value: URL(string: Constants.UdacityCreateAccountURL)!,
                                        range: foundRange)
         
         // Aligning text programatically, since we are using custom attributes for the textView
@@ -65,12 +87,135 @@ class ViewController: UIViewController {
     
     @IBAction func dontHaveAccountClick(_ sender: Any) {
         
-        UIApplication.shared.open(Constants.UdacityCreateAccountURL)
+        UIApplication.shared.open(URL(string: Constants.UdacityCreateAccountURL)!)
         
     }
 
-    @IBAction func loginClick(_ sender: Any) {
-        //Verify Login/Password combo againts Udacity API
+    /**
+     Login button action. Logs into Udacity Account.
+     - UNSECURE, sends passwords over HTTP unencrypted
+     */
+    @IBAction func loginClick(_ sender: Any)
+    {
+        
+        // Check if both fields are filled out, present alert, if either one is empty
+        guard let loginFieldValue =  txtEmail.text,
+            !loginFieldValue.isEmpty,
+            let passwordFIeldValue = txtPassword.text,
+            !passwordFIeldValue.isEmpty
+        else {
+            showAlert(message: "Empty Email or Password")
+            return
+        }
+        
+        let url = URL(string: Constants.UdacityGetSessionIDURL)
+        let request = NSMutableURLRequest(url: url!)
+        request.httpMethod = "POST"
+        request.addValue("application/json;charset=utf-8", forHTTPHeaderField: "Accept")
+        request.addValue("application/json;charset=utf-8", forHTTPHeaderField: "Content-Type")
+        
+        let jsonBody = [
+            "udacity": [
+                Constants.UdacityRequestLogin        : loginFieldValue,
+                Constants.UdacityRequestPassword : passwordFIeldValue
+            ]
+        ]
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: jsonBody, options: .prettyPrinted) else {
+            print("Could not parse data into JSON: \(jsonBody)")
+            return
+        }
+        request.httpBody = jsonData
+        
+        let task = URLSession.shared.dataTask(with: request as URLRequest) { data, response, error in
+            
+            self.activityIndicator.stopAnimating()
+            
+            // Handle error (Network issues or Web Service reachability)
+            if error != nil
+            {
+                performUIUpdatesOnMain {
+                    self.showAlert(message: "The seems to be an issue connecting to Udacity Web Service. Please check your internet connection and try again.")
+                }
+                print("ERROR: \(error!)")
+                if let response = response {
+                    print("RESPONSE: \(response)")
+                }
+                
+                return
+            }
+            
+            // Parsing the response
+            
+            // Striping away security purposes characters
+            let range = Range(5..<data!.count)
+            let newData = data?.subdata(in: range) /* subset response data! */
+            
+            guard let json = try! JSONSerialization.jsonObject(with: newData!, options: .allowFragments) as? [String : Any] else {
+                print("Could not parse Udacity response into JSON")
+                self.showAlert(message: "Something went wrong. Please try again.")
+                return
+            }
+            
+            /**
+            JSON, if login unsuccessful has two keys:
+                - status_code
+                - message
+            if successful:
+             {
+                 "account": {
+                     "registered": true,
+                     "key": "3903878747"
+                 },
+                 "session": {
+                     "id": "1457628510Sc18f2ad4cd3fb317fb8e028488694088",
+                     "expiration": "2015-05-10T16:48:30.760460Z"
+                 }
+             }
+            */
+            if let statusCode = json[Constants.UdacityResponseStatus] as? Int {
+            
+                print("Udacity Login Request Status Code: \(statusCode)")
+
+                // Show message to a user about unsuccessful login
+                performUIUpdatesOnMain {
+                    if let error = json[Constants.UdacityResponseError] as? String {
+                        self.showAlert(message: error)
+                    }
+                }
+                return
+            }
+            
+            // If account exists and all is good
+            if let account = json[Constants.UdacityResponseAccount] as? [String : Any],
+                let registered = account[Constants.UdacityResponseRegistered] as? Bool,
+                let session = json[Constants.UdacityResponseSession] as? [String : Any],
+                registered == true
+            {
+                let userID = account[Constants.UdacityResponseUserID] as! String
+                let sessionID = session[Constants.UdacityResponseSessionID] as! String
+                let expirationDate = session[Constants.UdacityResponseSessionExpiration] as! String
+                
+                print("User ID: \(userID)")
+                print("Session ID: \(sessionID)")
+                print("Expiration Timestamp: \(expirationDate)")
+                
+                
+                // TEMPORARY (in place of segue transition to a map view)
+                performUIUpdatesOnMain {
+                    self.showAlert(message: "All is good, ready to move to the Map view")
+                }
+            }
+
+            return
+        }
+        task.resume()
+        self.activityIndicator.startAnimating()
+    }
+    
+    internal func showAlert(message: String) -> Void {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
 }
