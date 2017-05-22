@@ -10,6 +10,10 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    var userID : String!
+    var sessionID : String!
+    var expirationTimestamp : String!
+    
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var txtEmail: UITextField!
     @IBOutlet weak var txtPassword: UITextField!
@@ -22,19 +26,11 @@ class ViewController: UIViewController {
         // Subscribe to keyboard events (keyboardWill[Show|Hide]), used to shift view
         // to display the bottom text field, while entering text into it
         subscribeToKeyboardNotifications()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        //Clean up
-        unsubscribeFromKeyboardNotifications()
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
         
         // Disables scroll view (only enabled, when keyboard is shown)
         self.scrollView.isScrollEnabled = false
+        
+        self.navigationController?.isNavigationBarHidden = true
         
         // Setup input fields delegates (needed for keyboard show/hide events)
         txtEmail.delegate = self
@@ -67,28 +63,32 @@ class ViewController: UIViewController {
         
         tvDontHaveAccount.attributedText = dontHaveAccountAS
         
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // Clean up
+        unsubscribeFromKeyboardNotifications()
+        
+        // Adds navigation bar back in, when the login controller is not on top anymore
+        self.navigationController?.isNavigationBarHidden = false
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     override func viewDidLayoutSubviews() {
         
         //Round corners for login button
         self.btnUdacityLogin.layer.cornerRadius = Constants.ButtonCornerRadius
         self.btnUdacityLogin.layer.masksToBounds = true
         
-        //Color "Sign Up" - blue on a 'Don't have account? Sign Up' button
-        
-        
     }
     
     @IBAction func dontHaveAccountClick(_ sender: Any) {
-        
         UIApplication.shared.open(URL(string: Constants.UdacityCreateAccountURL)!)
-        
     }
 
     /**
@@ -191,25 +191,40 @@ class ViewController: UIViewController {
                 let session = json[Constants.UdacityResponseSession] as? [String : Any],
                 registered == true
             {
-                let userID = account[Constants.UdacityResponseUserID] as! String
-                let sessionID = session[Constants.UdacityResponseSessionID] as! String
-                let expirationDate = session[Constants.UdacityResponseSessionExpiration] as! String
+                self.userID = account[Constants.UdacityResponseUserID] as! String
+                self.sessionID = session[Constants.UdacityResponseSessionID] as! String
+                self.expirationTimestamp = session[Constants.UdacityResponseSessionExpiration] as! String
                 
-                print("User ID: \(userID)")
-                print("Session ID: \(sessionID)")
-                print("Expiration Timestamp: \(expirationDate)")
+                print("User ID: \(self.userID)")
+                print("Session ID: \(self.sessionID)")
+                print("Expiration Timestamp: \(self.expirationTimestamp)")
                 
                 
                 // TEMPORARY (in place of segue transition to a map view)
                 performUIUpdatesOnMain {
-                    self.showAlert(message: "All is good, ready to move to the Map view")
+                    //self.showAlert(message: "All is good, ready to move to the Map view")
+                    self.performSegue(withIdentifier: "loginSuccessfulSegue", sender: self)
                 }
+                
             }
 
             return
         }
         task.resume()
         self.activityIndicator.startAnimating()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let tabBarController = segue.destination as! UITabBarController
+        
+        //let navigationController = tabBarController.viewControllers![0] as! UINavigationController
+        //let destinationViewController = navigationController.topViewController as! LoggedInMapViewController
+        
+        let destinationViewController = tabBarController.viewControllers![0] as! LoggedInMapViewController
+        
+        destinationViewController.userID = self.userID
+        destinationViewController.sessionID = self.sessionID
+        destinationViewController.expirationTimestamp = self.expirationTimestamp
     }
     
     internal func showAlert(message: String) -> Void {
