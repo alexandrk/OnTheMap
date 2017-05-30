@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension ViewController : UITextFieldDelegate {
+extension LoginViewController : UITextFieldDelegate {
     
     func subscribeToKeyboardNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),

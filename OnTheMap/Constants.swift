@@ -36,5 +36,21 @@ struct Constants
     static let UdacityResponseSessionExpiration = "expiration"
     
     // MARK: URLS
-    static let UdacityGetSessionIDURL = "https://www.udacity.com/api/session" 
+    static let UdacitySessionIDURL = "https://www.udacity.com/api/session"
+    static let UdacityParseDataURL = "https://parse.udacity.com/parse/classes/StudentLocation"
+    
+    // MARK: Parse `UserLocation` JSON Response keys
+    struct UserLocation
+    {
+        static let firstName = "firstName"
+        static let lastName  = "lastName"
+        static let latitude  = "latitude"
+        static let longitude = "longitude"
+        static let mapString = "mapString"
+        static let mediaURL  = "mediaURL"
+        static let parseID   = "objectId"
+        static let udacityID = "uniqueKey"
+        static let createdAt = "createdAt"
+        static let updatedAt = "updatedAt"
+    }
 }

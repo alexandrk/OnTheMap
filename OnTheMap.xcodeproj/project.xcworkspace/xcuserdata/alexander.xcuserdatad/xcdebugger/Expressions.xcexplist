@@ -3,12 +3,39 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "ViewController.loginClick(Any) -&gt; ():ViewController.swift">
+         contextName = "LoggedInMapViewController.viewWillAppear(Bool) -&gt; ():LoggedInMapViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "activityIndicator">
+               value = "self.navigationItem">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "TableViewController.tableView(UITableView, didSelectRowAt : IndexPath) -&gt; ():TableViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "url.absoluteString">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "TableViewController.tableView(UITableView, numberOfRowsInSection : Int) -&gt; Int:TableViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.userLocations.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "LoggedInMapViewController.(viewDidLoad() -&gt; ()).(closure #1):LoggedInMapViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.navigationItem.leftBarButtonItems">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "LoggedInMapViewController.(requestPinData() -&gt; ()).(closure #1):LoggedInMapViewController.swift">
       </ContextState>
       <ContextState
          contextName = "ViewController.(loginClick(Any) -&gt; ()).(closure #1):ViewController.swift">
@@ -18,6 +45,60 @@
             </PersistentString>
             <PersistentString
                value = "newData?[Constants.UdacityResponseStatus]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "TableViewController.viewDidLoad() -&gt; ():TableViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.parent?.parent? as! UITabBarController">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "TableViewController.refreshData() -&gt; ():TableViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "tableView.numberOfSections()">
+            </PersistentString>
+            <PersistentString
+               value = "tableView.numberOfRows(inSection: 0)">
+            </PersistentString>
+            <PersistentString
+               value = "userLocations.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "TableViewController.tableView(UITableView, cellForRowAt : IndexPath) -&gt; UITableViewCell:TableViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "cell">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "LoggedInMapViewController.viewDidLoad() -&gt; ():LoggedInMapViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.navigationItem.leftBarButtonItems">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.loginClick(Any) -&gt; ():ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "activityIndicator">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "LoggedInMapViewController.tableView(UITableView, numberOfRowsInSection : Int) -&gt; Int:LoggedInMapViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.userLocations">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

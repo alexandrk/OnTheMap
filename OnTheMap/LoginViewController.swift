@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  LoginViewController.swift
 //  OnTheMap
 //
 //  Created by Alexander on 5/13/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class LoginViewController: UIViewController {
     
     var userID : String!
     var sessionID : String!
@@ -108,7 +108,7 @@ class ViewController: UIViewController {
             return
         }
         
-        let url = URL(string: Constants.UdacityGetSessionIDURL)
+        let url = URL(string: Constants.UdacitySessionIDURL)
         let request = NSMutableURLRequest(url: url!)
         request.httpMethod = "POST"
         request.addValue("application/json;charset=utf-8", forHTTPHeaderField: "Accept")
@@ -128,12 +128,14 @@ class ViewController: UIViewController {
         
         let task = URLSession.shared.dataTask(with: request as URLRequest) { data, response, error in
             
-            self.activityIndicator.stopAnimating()
+            HelperFuncs.performUIUpdatesOnMain {
+                self.activityIndicator.stopAnimating()
+            }
             
             // Handle error (Network issues or Web Service reachability)
             if error != nil
             {
-                performUIUpdatesOnMain {
+                HelperFuncs.performUIUpdatesOnMain {
                     self.showAlert(message: "The seems to be an issue connecting to Udacity Web Service. Please check your internet connection and try again.")
                 }
                 print("ERROR: \(error!)")
@@ -177,7 +179,7 @@ class ViewController: UIViewController {
                 print("Udacity Login Request Status Code: \(statusCode)")
 
                 // Show message to a user about unsuccessful login
-                performUIUpdatesOnMain {
+                HelperFuncs.performUIUpdatesOnMain {
                     if let error = json[Constants.UdacityResponseError] as? String {
                         self.showAlert(message: error)
                     }
@@ -201,7 +203,7 @@ class ViewController: UIViewController {
                 
                 
                 // TEMPORARY (in place of segue transition to a map view)
-                performUIUpdatesOnMain {
+                HelperFuncs.performUIUpdatesOnMain {
                     //self.showAlert(message: "All is good, ready to move to the Map view")
                     self.performSegue(withIdentifier: "loginSuccessfulSegue", sender: self)
                 }
@@ -217,10 +219,11 @@ class ViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let tabBarController = segue.destination as! UITabBarController
         
-        //let navigationController = tabBarController.viewControllers![0] as! UINavigationController
-        //let destinationViewController = navigationController.topViewController as! LoggedInMapViewController
+        let navigationController = tabBarController.viewControllers![0] as! UINavigationController
+        let destinationViewController = navigationController.topViewController as! MapViewController
         
-        let destinationViewController = tabBarController.viewControllers![0] as! LoggedInMapViewController
+        // If not embeded in navBarController
+        //let destinationViewController = tabBarController.viewControllers![0] as! MapViewController
         
         destinationViewController.userID = self.userID
         destinationViewController.sessionID = self.sessionID
