@@ -3,10 +3,24 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "LoggedInMapViewController.viewDidLoad() -&gt; ():LoggedInMapViewController.swift">
+         contextName = "TableViewController.refreshData() -&gt; ():TableViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.navigationItem.leftBarButtonItems">
+               value = "tableView.numberOfSections()">
+            </PersistentString>
+            <PersistentString
+               value = "tableView.numberOfRows(inSection: 0)">
+            </PersistentString>
+            <PersistentString
+               value = "userLocations.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AddLocationPinController.(submitBtnClick(Any) -&gt; ()).(closure #1).(closure #1):AddLocationPinController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.navigationController">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -46,18 +60,21 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "LoggedInMapViewController.viewWillAppear(Bool) -&gt; ():LoggedInMapViewController.swift">
+         contextName = "AddLocationPinController.cancelButtonAction(AnyObject) -&gt; ():AddLocationPinController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.navigationItem">
+               value = "submitBtn.alpha">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "Networking.(taskForPostMethod(urlString : String, jsonData : String, completionHandlerForPOST : (AnyObject?, NSError?) -&gt; ()) -&gt; ()).(closure #1):Networking.swift">
+         contextName = "CustomTabBarController.checkPreviousEntries() -&gt; ():CustomTabBarController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "(response as? HTTPURLResponse)?.statusCode">
+               value = "String(userLocationUdacityID) == AppData.sharedInstance.userID">
+            </PersistentString>
+            <PersistentString
+               value = "AppData.sharedInstance.userID">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -70,10 +87,10 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "AddLocationPinController.cancelButtonAction(AnyObject) -&gt; ():AddLocationPinController.swift">
+         contextName = "Networking.(taskForPostMethod(urlString : String, jsonData : String, completionHandlerForPOST : (AnyObject?, NSError?) -&gt; ()) -&gt; ()).(closure #1):Networking.swift">
          <PersistentStrings>
             <PersistentString
-               value = "submitBtn.alpha">
+               value = "(response as? HTTPURLResponse)?.statusCode">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -86,13 +103,10 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "CustomTabBarController.checkPreviousEntries() -&gt; ():CustomTabBarController.swift">
+         contextName = "LoggedInMapViewController.viewWillAppear(Bool) -&gt; ():LoggedInMapViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "String(userLocationUdacityID) == AppData.sharedInstance.userID">
-            </PersistentString>
-            <PersistentString
-               value = "AppData.sharedInstance.userID">
+               value = "self.navigationItem">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -223,16 +237,10 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "TableViewController.refreshData() -&gt; ():TableViewController.swift">
+         contextName = "LoggedInMapViewController.viewDidLoad() -&gt; ():LoggedInMapViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "tableView.numberOfSections()">
-            </PersistentString>
-            <PersistentString
-               value = "tableView.numberOfRows(inSection: 0)">
-            </PersistentString>
-            <PersistentString
-               value = "userLocations.count">
+               value = "self.navigationItem.leftBarButtonItems">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

@@ -10,8 +10,6 @@
 		11013D741EDFC119005FC5A7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11013D721EDFC119005FC5A7 /* LaunchScreen.storyboard */; };
 		11013D761EE292B1005FC5A7 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11013D751EE292B1005FC5A7 /* AppData.swift */; };
 		1115DFD61ECA971B007B7D86 /* HelperFuncs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1115DFD51ECA971B007B7D86 /* HelperFuncs.swift */; };
-		111D71D11EDE021F0058A562 /* Model in Resources */ = {isa = PBXBuildFile; fileRef = 111D71CF1EDE021F0058A562 /* Model */; };
-		111D71D21EDE021F0058A562 /* View in Resources */ = {isa = PBXBuildFile; fileRef = 111D71D01EDE021F0058A562 /* View */; };
 		111D71D41EDE034F0058A562 /* AddLocationPinControllerExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D71D31EDE034F0058A562 /* AddLocationPinControllerExt.swift */; };
 		11354DC41ED6178C00D557B1 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11354DC31ED6178C00D557B1 /* TableViewController.swift */; };
 		11354DC61EDA18B100D557B1 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11354DC51EDA18B100D557B1 /* CustomTableViewCell.swift */; };
@@ -52,8 +50,6 @@
 		11013D731EDFC119005FC5A7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		11013D751EE292B1005FC5A7 /* AppData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
 		1115DFD51ECA971B007B7D86 /* HelperFuncs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HelperFuncs.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		111D71CF1EDE021F0058A562 /* Model */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Model; sourceTree = "<group>"; };
-		111D71D01EDE021F0058A562 /* View */ = {isa = PBXFileReference; lastKnownFileType = folder; path = View; sourceTree = "<group>"; };
 		111D71D31EDE034F0058A562 /* AddLocationPinControllerExt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddLocationPinControllerExt.swift; sourceTree = "<group>"; };
 		11354DC31ED6178C00D557B1 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TableViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		11354DC51EDA18B100D557B1 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
@@ -137,8 +133,6 @@
 		118DE9E61EC7838400AB1B23 /* OnTheMap */ = {
 			isa = PBXGroup;
 			children = (
-				111D71CF1EDE021F0058A562 /* Model */,
-				111D71D01EDE021F0058A562 /* View */,
 				118DE9E71EC7838400AB1B23 /* AppDelegate.swift */,
 				114E00D41EC79FA200E7C863 /* Constants.swift */,
 				118F900A1ED4E0AE00EC7286 /* UserLocation.swift */,
@@ -295,8 +289,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				11FB9D421ECCF4F200A6DCA8 /* Main.storyboard in Resources */,
-				111D71D11EDE021F0058A562 /* Model in Resources */,
-				111D71D21EDE021F0058A562 /* View in Resources */,
 				11013D741EDFC119005FC5A7 /* LaunchScreen.storyboard in Resources */,
 				118DE9EF1EC7838400AB1B23 /* Assets.xcassets in Resources */,
 			);

@@ -14,6 +14,7 @@ class AddLocationPinController : UIViewController {
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var locationStringField: UITextField!
@@ -127,6 +128,9 @@ class AddLocationPinController : UIViewController {
         }
         AppData.sharedInstance.locationString = address
         
+        // Start Activity Indicator
+        self.activityIndicator.startAnimating()
+        
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(AppData.sharedInstance.locationString) {
             placemarks, error in
@@ -135,7 +139,12 @@ class AddLocationPinController : UIViewController {
             func errorFunc(_ error : Error){
                 print(error)
                 HelperFuncs.performUIUpdatesOnMain {
+                    
+                    // Stop Activity Indicator
+                    self.activityIndicator.stopAnimating()
+                    
                     HelperFuncs.showAlert(self, message: "Error finding a location\nPlease try again")
+                    
                 }
             }
             
@@ -176,6 +185,9 @@ class AddLocationPinController : UIViewController {
             // Transition to map and url field
             HelperFuncs.performUIUpdatesOnMain {
                 self.transitionToMap()
+                
+                // Stop Activity Indicator
+                self.activityIndicator.stopAnimating()
             }
         }
     }
@@ -219,8 +231,15 @@ class AddLocationPinController : UIViewController {
             }
         }
         
+        // Start Activity Indicator
+        self.activityIndicator.startAnimating()
+        
         // 2. Get Udacity Profile Inormation
         guard let userID = AppData.sharedInstance.userID else {
+            
+            // Stop Activity Indicator
+            self.activityIndicator.stopAnimating()
+            
             HelperFuncs.showAlert(self, message: "No Udacity User ID found.\nCannot continue.")
             return
         }
@@ -229,7 +248,16 @@ class AddLocationPinController : UIViewController {
         requestUdacityProfileInfo(userID)
         {
             // 3. Atempt to save new pin data
-            self.saveNewPinData()
+            self.saveNewPinData(){
+                
+                // Stop Activity Indicator
+                self.activityIndicator.stopAnimating()
+                
+                if (self.navigationController != nil) {
+                    self.navigationController!.popViewController(animated: true)
+                }
+                
+            }
             
         }
     }
@@ -282,7 +310,7 @@ class AddLocationPinController : UIViewController {
     /**
         Posts new data to the parse db or updates an existing record, if one is already present
     */
-    private func saveNewPinData(){
+    private func saveNewPinData(completionHandler: @escaping() -> Void){
         
         // Default values for variables, used when posting a new location
         // not updating an existing one
@@ -329,7 +357,7 @@ class AddLocationPinController : UIViewController {
                 }
                 
                 HelperFuncs.performUIUpdatesOnMain {
-                    self.navigationController!.popViewController(animated: true)
+                    completionHandler()
                 }
         }
     }
