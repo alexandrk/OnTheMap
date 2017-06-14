@@ -1,14 +1,14 @@
 //
-//  LoginViewControllerExt.swift
+//  AddLocationPinControllerExt.swift
 //  MeMe
 //
-//  Created by Alexander on 5/10/17.
+//  Created by Alexander on 5/29/17.
 //  Copyright © 2017 Dictality. All rights reserved.
 //
 
 import UIKit
 
-extension LoginViewController : UITextFieldDelegate {
+extension AddLocationPinController : UITextFieldDelegate {
     
     func subscribeToKeyboardNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),

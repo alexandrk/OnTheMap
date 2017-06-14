@@ -35,7 +35,7 @@ struct UserLocation {
     var updatedAt : String
     
     // construct a UserLocation from a dictionary object
-    init(dictionary: [String:Any]) {
+    init(dictionary: [String:AnyObject]) {
         
         firstName = dictionary[Constants.UserLocation.firstName] as? String
         lastName  = dictionary[Constants.UserLocation.lastName]  as? String
@@ -49,7 +49,7 @@ struct UserLocation {
         updatedAt = dictionary[Constants.UserLocation.updatedAt] as! String
     }
     
-    static func userLocationsFromResults(_ results: [[String:Any]]) -> [UserLocation] {
+    static func userLocationsFromResults(_ results: [[String:AnyObject]]) -> [UserLocation] {
         
         var userLocations = [UserLocation]()
         

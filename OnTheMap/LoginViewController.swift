@@ -8,6 +8,10 @@
 
 import UIKit
 
+extension LoginViewController {
+    
+}
+
 class LoginViewController: UIViewController {
     
     var userID : String!
@@ -20,17 +24,19 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var btnUdacityLogin: UIButton!
     @IBOutlet weak var tvDontHaveAccount: UITextView!
     @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var containerView: UIView!
     
     override func viewWillAppear(_ animated: Bool) {
-        // Subscribe to keyboard events (keyboardWill[Show|Hide]), used to shift view
-        // to display the bottom text field, while entering text into it
-        subscribeToKeyboardNotifications()
         
         // Disables scroll view (only enabled, when keyboard is shown)
         self.scrollView.isScrollEnabled = false
         
-        self.navigationController?.isNavigationBarHidden = true
+        //Round corners for login button
+        self.btnUdacityLogin.layer.cornerRadius = Constants.ButtonCornerRadius
+        //self.btnUdacityLogin.layer.masksToBounds = true
+        
+        // Subscribe to keyboard events (keyboardWill[Show|Hide]), used to shift view
+        // to display the bottom text field, while entering text into it
+        subscribeToKeyboardNotifications()
         
         // Setup input fields delegates (needed for keyboard show/hide events)
         txtEmail.delegate = self
@@ -41,199 +47,114 @@ class LoginViewController: UIViewController {
         txtEmail.borderStyle = UITextBorderStyle.roundedRect
         txtPassword.borderStyle = UITextBorderStyle.roundedRect
         
-        let dontHaveAccountAS = NSMutableAttributedString(string: Constants.DontHaveAnAccountText)
-        let foundRange = dontHaveAccountAS.mutableString.range(of: Constants.DontHaveAnAccountLinkText)
-        
-        // Font size attribute. Size needs to be set programatically, since we are using custom attributes for the textView
-        dontHaveAccountAS.addAttribute(NSFontAttributeName,
-                                       value: Constants.DontHaveAnAccountFont,
-                                       range: NSMakeRange(0, dontHaveAccountAS.length))
-        
-        // Creating a link for a given part of the string
-        dontHaveAccountAS.addAttribute(NSLinkAttributeName,
-                                       value: URL(string: Constants.UdacityCreateAccountURL)!,
-                                       range: foundRange)
-        
-        // Aligning text programatically, since we are using custom attributes for the textView
-        let paragraph = NSMutableParagraphStyle()
-        paragraph.alignment = .center
-        dontHaveAccountAS.addAttribute(NSParagraphStyleAttributeName,
-                                       value: paragraph,
-                                       range: NSMakeRange(0, dontHaveAccountAS.length))
-        
-        tvDontHaveAccount.attributedText = dontHaveAccountAS
+        // Seting up custom styling for dontHaveAccountTextView
+        setupCustomStylingForDontHaveAccountTextView()
         
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        // Clean up
+        
+        // Unsubscribe from keyboard events
         unsubscribeFromKeyboardNotifications()
-        
-        // Adds navigation bar back in, when the login controller is not on top anymore
-        self.navigationController?.isNavigationBarHidden = false
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    /**
+        Sets up custom styling for 'Dont have an account Text View'.
+        - Implemented as AttributedString to add link to a specific part of the string.
+        - Font size and alignment needs to be set manually, since we are using custom attributes.
+    */
+    private func setupCustomStylingForDontHaveAccountTextView(){
+        let dontHaveAccountAS   = NSMutableAttributedString(string: Constants.DontHaveAnAccountText)
+        let foundRange          = dontHaveAccountAS.mutableString.range(of: Constants.DontHaveAnAccountLinkText)
+        let fullStringRange     = NSMakeRange(0, dontHaveAccountAS.length)
         
-    }
-    
-    override func viewDidLayoutSubviews() {
+        // Creating a link for a given part of the string
+        dontHaveAccountAS.addAttribute(NSLinkAttributeName,
+                                       value: URL(string: Constants.UdacityCreateAccountURL)!, range: foundRange)
         
-        //Round corners for login button
-        self.btnUdacityLogin.layer.cornerRadius = Constants.ButtonCornerRadius
-        self.btnUdacityLogin.layer.masksToBounds = true
+        // Set alignment and font size
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.alignment = .center
+        dontHaveAccountAS.addAttribute(NSParagraphStyleAttributeName, value: paragraph, range: fullStringRange)
+        dontHaveAccountAS.addAttribute(NSFontAttributeName, value: Constants.DontHaveAnAccountFont, range: fullStringRange)
         
-    }
-    
-    @IBAction func dontHaveAccountClick(_ sender: Any) {
-        UIApplication.shared.open(URL(string: Constants.UdacityCreateAccountURL)!)
+        //Add attributed string to the textView
+        tvDontHaveAccount.attributedText = dontHaveAccountAS
     }
 
     /**
      Login button action. Logs into Udacity Account.
-     - UNSECURE, sends passwords over HTTP unencrypted
+     - **UNSECURE**, sends passwords over HTTP unencrypted
      */
-    @IBAction func loginClick(_ sender: Any)
+    @IBAction func loginClick(_ sender: AnyObject)
     {
         
         // Check if both fields are filled out, present alert, if either one is empty
-        guard let loginFieldValue =  txtEmail.text,
-            !loginFieldValue.isEmpty,
-            let passwordFIeldValue = txtPassword.text,
-            !passwordFIeldValue.isEmpty
+        guard let loginFieldValue =  txtEmail.text, !loginFieldValue.isEmpty,
+            let passwordFIeldValue = txtPassword.text, !passwordFIeldValue.isEmpty
         else {
-            showAlert(message: "Empty Email or Password")
+            HelperFuncs.showAlert(self, message: "Empty Email or Password")
             return
         }
         
-        let url = URL(string: Constants.UdacitySessionIDURL)
-        let request = NSMutableURLRequest(url: url!)
-        request.httpMethod = "POST"
-        request.addValue("application/json;charset=utf-8", forHTTPHeaderField: "Accept")
-        request.addValue("application/json;charset=utf-8", forHTTPHeaderField: "Content-Type")
+        // Create JSON Body from the login fields
+        let jsonBody =
+            "{ \"udacity\": " +
+                "{" +
+                    "\"\(Constants.UdacityRequestLogin)\" : \"\(loginFieldValue)\"," +
+                    "\"\(Constants.UdacityRequestPassword)\" : \"\(passwordFIeldValue)\"" +
+                "}" +
+            "}"
+
+        // Start Acrivity Indicator, before making a Network request
+        self.activityIndicator.startAnimating()
         
-        let jsonBody = [
-            "udacity": [
-                Constants.UdacityRequestLogin        : loginFieldValue,
-                Constants.UdacityRequestPassword : passwordFIeldValue
-            ]
-        ]
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: jsonBody, options: .prettyPrinted) else {
-            print("Could not parse data into JSON: \(jsonBody)")
-            return
-        }
-        request.httpBody = jsonData
-        
-        let task = URLSession.shared.dataTask(with: request as URLRequest) { data, response, error in
+        Networking.sharedInstance.taskForPostPutMethod(
+        httpMethod: "POST",
+        urlString: Constants.UdacitySessionIDURL,
+        jsonData: jsonBody){
+            result, error in
             
+            // Stop Acrivity Indicator, when call back is called
             HelperFuncs.performUIUpdatesOnMain {
                 self.activityIndicator.stopAnimating()
             }
             
-            // Handle error (Network issues or Web Service reachability)
-            if error != nil
-            {
-                HelperFuncs.performUIUpdatesOnMain {
-                    self.showAlert(message: "The seems to be an issue connecting to Udacity Web Service. Please check your internet connection and try again.")
+            if let error = error {
+                if error.localizedDescription.contains("Status Code: 403") {
+                    HelperFuncs.showAlert(self, message: "Account doesn't exist\nOr invalid credetials entered")
                 }
-                print("ERROR: \(error!)")
-                if let response = response {
-                    print("RESPONSE: \(response)")
+                else {
+                    print(error)
+                    print(result ?? "[[No Data Returned]]")
+                    HelperFuncs.showAlert(self, message: "Something went wrong. Please try again.")
                 }
-                
-                return
             }
             
-            // Parsing the response
-            
-            // Striping away security purposes characters
-            let range = Range(5..<data!.count)
-            let newData = data?.subdata(in: range) /* subset response data! */
-            
-            guard let json = try! JSONSerialization.jsonObject(with: newData!, options: .allowFragments) as? [String : Any] else {
-                print("Could not parse Udacity response into JSON")
-                self.showAlert(message: "Something went wrong. Please try again.")
-                return
-            }
-            
-            /**
-            JSON, if login unsuccessful has two keys:
-                - status_code
-                - message
-            if successful:
-             {
-                 "account": {
-                     "registered": true,
-                     "key": "3903878747"
-                 },
-                 "session": {
-                     "id": "1457628510Sc18f2ad4cd3fb317fb8e028488694088",
-                     "expiration": "2015-05-10T16:48:30.760460Z"
-                 }
-             }
-            */
-            if let statusCode = json[Constants.UdacityResponseStatus] as? Int {
-            
-                print("Udacity Login Request Status Code: \(statusCode)")
-
-                // Show message to a user about unsuccessful login
-                HelperFuncs.performUIUpdatesOnMain {
-                    if let error = json[Constants.UdacityResponseError] as? String {
-                        self.showAlert(message: error)
-                    }
-                }
-                return
-            }
-            
-            // If account exists and all is good
-            if let account = json[Constants.UdacityResponseAccount] as? [String : Any],
-                let registered = account[Constants.UdacityResponseRegistered] as? Bool,
-                let session = json[Constants.UdacityResponseSession] as? [String : Any],
+            // If account exists and all is good, save the credentials to AppData.SharedInstance
+            if let account      = result?[Constants.UdacityResponseAccount] as? [String : AnyObject],
+                let registered  = account[Constants.UdacityResponseRegistered] as? Bool,
+                let session     = result?[Constants.UdacityResponseSession] as? [String : AnyObject],
                 registered == true
             {
-                self.userID = account[Constants.UdacityResponseUserID] as! String
-                self.sessionID = session[Constants.UdacityResponseSessionID] as! String
-                self.expirationTimestamp = session[Constants.UdacityResponseSessionExpiration] as! String
+                AppData.sharedInstance.userID         = account[Constants.UdacityResponseUserID] as! String
+                AppData.sharedInstance.sessionID      = session[Constants.UdacityResponseSessionID] as! String
+                AppData.sharedInstance.expirationTime = session[Constants.UdacityResponseSessionExpiration] as! String
                 
-                print("User ID: \(self.userID)")
-                print("Session ID: \(self.sessionID)")
-                print("Expiration Timestamp: \(self.expirationTimestamp)")
-                
-                
-                // TEMPORARY (in place of segue transition to a map view)
                 HelperFuncs.performUIUpdatesOnMain {
-                    //self.showAlert(message: "All is good, ready to move to the Map view")
-                    self.performSegue(withIdentifier: "loginSuccessfulSegue", sender: self)
+                    guard let vc = UIStoryboard(name: "Main", bundle: nil)
+                        .instantiateViewController(withIdentifier: "NavigationControllerStoryboardID")
+                        as? UINavigationController else
+                    {
+                        print("Could not instantiate view controller with identifier NavigationControllerStoryboardID of type UINavigationController")
+                        return
+                    }
+                    self.present(vc, animated: true, completion: nil)
                 }
                 
             }
-
-            return
         }
-        task.resume()
-        self.activityIndicator.startAnimating()
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let tabBarController = segue.destination as! UITabBarController
-        
-        let navigationController = tabBarController.viewControllers![0] as! UINavigationController
-        let destinationViewController = navigationController.topViewController as! MapViewController
-        
-        // If not embeded in navBarController
-        //let destinationViewController = tabBarController.viewControllers![0] as! MapViewController
-        
-        destinationViewController.userID = self.userID
-        destinationViewController.sessionID = self.sessionID
-        destinationViewController.expirationTimestamp = self.expirationTimestamp
-    }
-    
-    internal func showAlert(message: String) -> Void {
-        let alert = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
     }
     
 }

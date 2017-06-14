@@ -10,166 +10,172 @@ import Foundation
 import UIKit
 import MapKit
 
-class MapViewController: UIViewController {
+class MapViewController: UIViewController, CustomTabBarControllerDelegate {
 
-    var userID : String!
-    var sessionID : String!
-    var expirationTimestamp : String!
-    
-    var userLocations : [UserLocation]!
-    
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
-    override func viewWillAppear(_ animated: Bool) {
-        
+    override func viewDidAppear(_ animated: Bool) {
+        // Setting up a custom delegate field for CustomTabBarController
+        // Controlls which view to apply the buttons in the navigation bar to
+        guard let tabBarController = self.parent as? CustomTabBarController else {
+            print("Couldn't cast 'self.parent' as 'CustomTabBarController'")
+            return
+        }
+        tabBarController.customDelegate = self
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if mapView != nil {
-            requestPinData()
+        mapView.delegate = self
+        
+        // If data has not been loaded yet, request it
+        if AppData.sharedInstance.arrayOfLocations == nil {
+            
+            // Request Pin data
+            self.getPinDataAndPopulateMap()
         }
         else {
-            print("mapView is not initialized")
+            self.populateMapWithPins()
         }
-        
-        setTopNavigationBar()
     }
     
-    public func logOut() {
-        HelperFuncs.logOut{
-            self.dismiss(animated: true, completion: nil)
-        }
-    }
-   
-    @IBAction func refreshBtnPressed(_ sender: Any) {
+    /// CustomTabBarControllerProtocol function implementation
+    func refreshBtnPressed(_ sender: AnyObject) {
 
-        if mapView != nil {
-            userLocations = nil
-            // remove all annotations
-            self.mapView.removeAnnotations(self.mapView.annotations)
-            requestPinData()
-        }
-        else {
-            print("mapView is not initialized")
-        }
+        // remove stored location data
+        AppData.sharedInstance.arrayOfLocations = nil
+        
+        // remove all annotations from the map
+        self.mapView.removeAnnotations(self.mapView.annotations)
+        
+        // request new data and populate the map
+        getPinDataAndPopulateMap()
+        
     }
     
-    func requestPinData() {
-        let request = NSMutableURLRequest(url: URL(string: Constants.UdacityParseDataURL + "?limit=4000&order=-updatedAt")!)
-        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
-        
-        let task = URLSession.shared.dataTask(with: request as URLRequest) { data, response, error in
-            
-            if error != nil { // Handle error...
-                return
-            }
-            
-            guard let json = try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String : Any] else {
-                print("Could not parse Parse response into JSON")
-                self.showAlert(message: "Something went wrong. Please try again.")
-                return
-            }
-            
-            let listOfLocations = json["results"] as? [[String:Any]]
-            
-            self.userLocations = UserLocation.userLocationsFromResults(listOfLocations!)
-            
-            // Populate Map with Pins from Parse data
-            //let span : MKCoordinateSpan = MKCoordinateSpanMake(0.1, 0.1)
-            var annotationsArray = [MKPointAnnotation]()
-            for location in self.userLocations {
-                
-                if location.latitude == nil || location.longitude == nil {
-                    print("Location is nil for the following record:")
-                    print(location)
-                    print("--------------------------------------------------")
+    /// Creates pins for each location in the AppData and adds them on the map
+    internal func populateMapWithPins() {
+        var annotationsArray = [MKPointAnnotation]()
+        for location in AppData.sharedInstance.arrayOfLocations {
+
+            // Create Annotations based on AppData
+            guard
+                let latitude = location.latitude,
+                let longitude = location.longitude else {
+//                    print("----| Missing Location Data |----")
+//                    print(location)
                     continue
-                }
-                
-                let clLocation : CLLocationCoordinate2D = CLLocationCoordinate2DMake(
-                                                                location.latitude!,
-                                                                location.longitude!)
-                
-                let annotation = MKPointAnnotation()
-                annotation.coordinate = clLocation
-                annotation.title = "\(location.firstName!) \(location.lastName!)"
-                if let mediaURL = location.mediaURL {
-                    annotation.subtitle = "\(mediaURL)"
-                }
-                annotationsArray.append(annotation)
-                
-                if location.latitude == nil ||
-                    location.longitude == nil ||
-                    location.firstName == nil ||
-                    location.lastName == nil ||
-                    location.mediaURL == nil {
-                    print("--------------")
-                    print("First Name: \(location.firstName ?? "NIL")")
-                    print("Last Name: \(location.lastName ?? "NIL")")
-                    print("Latitude: \(location.latitude ?? 0)")
-                    print("Longitude: \(location.longitude ?? 0)")
-                    print("Media URL: \(location.mediaURL ?? "NIL")")
-                }
+            }
+            let clLocation = CLLocationCoordinate2DMake(latitude, longitude)
+            
+
+            // Setting up annotation
+            
+            // 1. Setting up title
+            let annotation          = MKPointAnnotation()
+            annotation.coordinate   = clLocation
+            if
+                let firstName = location.firstName,
+                let lastName = location.lastName,
+                firstName != "", lastName != ""
+            {
+                annotation.title    = "\(firstName) \(lastName)"
+            }
+            else {
+                annotation.title    = Constants.UserData.missingName
             }
             
-            //let region : MKCoordinateRegion = MKCoordinateRegionMake(location, span)
-            HelperFuncs.performUIUpdatesOnMain {
-                self.mapView.addAnnotations(annotationsArray)
-                self.activityIndicator.stopAnimating()
+            // 2. Setting up subtitle
+            if let mediaURL = location.mediaURL, mediaURL != "" {
+                annotation.subtitle = "\(mediaURL)"
             }
+            else {
+                annotation.subtitle = Constants.UserData.missingURL
+            }
+            annotationsArray.append(annotation)
         }
-        task.resume()
-        self.activityIndicator.startAnimating()
-    }
-    
-    internal func showAlert(message: String) -> Void {
-        let alert = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-    }
-
-    private func setTopNavigationBar() {
-        self.navigationItem.title = "ON THE MAP"
-        let logOutButton = UIBarButtonItem(title: "LOGOUT",
-                                           style: .done,
-                                           target: self,
-                                           action: #selector(self.logOut))
-        self.navigationItem.setLeftBarButtonItems([logOutButton], animated: true)
         
-        let refreshButton = UIBarButtonItem(barButtonSystemItem: .refresh,
-                                            target: self,
-                                            action: #selector(self.refreshBtnPressed))
-        let addItemButton = UIBarButtonItem(barButtonSystemItem: .add,
-                                            target: self,
-                                            action: #selector(self.addLocationItem))
-        self.navigationItem.setRightBarButtonItems([refreshButton, addItemButton], animated: true)
+        HelperFuncs.performUIUpdatesOnMain {
+            self.mapView.addAnnotations(annotationsArray)
+            self.activityIndicator.stopAnimating()
+        }
     }
     
-    func addLocationItem(){
-        // 1. Check to see if logged in user, already has a record in the dataset
-        //    1.a. => Yes, ask, if the user wants to override it with the new one
-        //    1.b. => No, return (do nothing)
-        // 2. If no record found, post a new one to the dataset
-        for userLocation in userLocations {
-            if let userLocationUdacityID = userLocation.udacityID {
-                
-                if String(userLocationUdacityID) == self.userID {
-                    showAlert(message: "You have a record: \(userLocation)")
+    /**
+     Convenience method. Combines tasks of getting data and populating the map in one.
+     Used on initial load and refresh button press
+     */
+    internal func getPinDataAndPopulateMap()
+    {
+        // Start activity indicator
+        self.activityIndicator.startAnimating()
+        
+        Networking.sharedInstance.taskForGetMethod(urlString: Constants.UdacityParseDataURL) {
+            result, error in
+            
+            if error != nil {
+                HelperFuncs.showAlert(self, message: "Error while retreiving pin data")
+                print(error ?? "[[ERROR is EMPTY]]")
+                HelperFuncs.performUIUpdatesOnMain {
+                    self.activityIndicator.stopAnimating()
                 }
-                
+                return
             }
-//            else {
-//                print("Name: \(userLocation.firstName ?? "[No First Name]") \(userLocation.firstName ?? "[No Last Name]")")
-//                print("UdacityID: \(String(describing: userLocation.udacityID))")
-//                print("------------------------------------")
-//            }
-//            print(userLocation)
-//            print("------------------------------------")
+            
+            guard let result = result else {
+                HelperFuncs.showAlert(self, message: "No pin data found")
+                return
+            }
+            
+            let listOfLocations = result["results"] as? [[String:AnyObject]]
+            AppData.sharedInstance.arrayOfLocations = UserLocation.userLocationsFromResults(listOfLocations!)
+            
+            self.populateMapWithPins()
+            
         }
     }
 
+}
+
+extension MapViewController : MKMapViewDelegate {
+    
+    /// Creates annotations with callouts,
+    /// callouts are used to add click event to annotations
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        let view : MKPinAnnotationView
+        let identifier = "any"
+        if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKPinAnnotationView {
+            dequeuedView.annotation = annotation
+            view = dequeuedView
+        } else {
+            view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            view.canShowCallout = true
+            view.calloutOffset = CGPoint(x: -5, y: 5)
+            view.rightCalloutAccessoryView = UIButton(type: .detailDisclosure) as UIView
+        }
+        return view
+    
+    }
+    
+    /// Adds webView forwarding to annotations with proper links
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl)
+    {
+        guard let anotation = view.annotation else {return}
+        if (control == view.rightCalloutAccessoryView)
+        {
+            if let urlString = anotation.subtitle,
+                urlString != Constants.UserData.missingURL,
+                let url = URL(string: urlString!),
+                UIApplication.shared.canOpenURL(url)
+            {
+                UIApplication.shared.open(url)
+            }
+            else {
+                HelperFuncs.showAlert(self, message: "Invalid URL\nPlease try another pin")
+            }
+        }
+    }
 }

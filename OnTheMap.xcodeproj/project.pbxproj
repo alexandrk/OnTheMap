@@ -7,22 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		11013D741EDFC119005FC5A7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11013D721EDFC119005FC5A7 /* LaunchScreen.storyboard */; };
+		11013D761EE292B1005FC5A7 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11013D751EE292B1005FC5A7 /* AppData.swift */; };
 		1115DFD61ECA971B007B7D86 /* HelperFuncs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1115DFD51ECA971B007B7D86 /* HelperFuncs.swift */; };
+		111D71D11EDE021F0058A562 /* Model in Resources */ = {isa = PBXBuildFile; fileRef = 111D71CF1EDE021F0058A562 /* Model */; };
+		111D71D21EDE021F0058A562 /* View in Resources */ = {isa = PBXBuildFile; fileRef = 111D71D01EDE021F0058A562 /* View */; };
+		111D71D41EDE034F0058A562 /* AddLocationPinControllerExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D71D31EDE034F0058A562 /* AddLocationPinControllerExt.swift */; };
 		11354DC41ED6178C00D557B1 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11354DC31ED6178C00D557B1 /* TableViewController.swift */; };
 		11354DC61EDA18B100D557B1 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11354DC51EDA18B100D557B1 /* CustomTableViewCell.swift */; };
 		114E00D51EC79FA200E7C863 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114E00D41EC79FA200E7C863 /* Constants.swift */; };
 		116F2BE31ED2829B006EF863 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 116F2BE21ED2829B006EF863 /* MapKit.framework */; };
 		118DE9E81EC7838400AB1B23 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118DE9E71EC7838400AB1B23 /* AppDelegate.swift */; };
 		118DE9EF1EC7838400AB1B23 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 118DE9EE1EC7838400AB1B23 /* Assets.xcassets */; };
-		118DE9F21EC7838400AB1B23 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 118DE9F01EC7838400AB1B23 /* LaunchScreen.storyboard */; };
 		118DE9FD1EC7838500AB1B23 /* OnTheMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118DE9FC1EC7838500AB1B23 /* OnTheMapTests.swift */; };
 		118DEA081EC7838500AB1B23 /* OnTheMapUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118DEA071EC7838500AB1B23 /* OnTheMapUITests.swift */; };
 		118F90081ED3AAA800EC7286 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F90061ED3AAA800EC7286 /* LoginViewController.swift */; };
 		118F90091ED3AAA800EC7286 /* LoginViewControllerExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F90071ED3AAA800EC7286 /* LoginViewControllerExt.swift */; };
 		118F900B1ED4E0AE00EC7286 /* UserLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F900A1ED4E0AE00EC7286 /* UserLocation.swift */; };
+		11C545951EDFB0F200583137 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C545941EDFB0F200583137 /* CustomTabBarController.swift */; };
 		11FB9D421ECCF4F200A6DCA8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11FB9D401ECCF4F200A6DCA8 /* Main.storyboard */; };
 		11FD0A491EDCD10300C8BBFF /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FD0A481EDCD10300C8BBFF /* MapViewController.swift */; };
-		11FD0A4C1EDD2F9500C8BBFF /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FD0A4B1EDD2F9500C8BBFF /* Networking.swift */; };
+		11FD0A4E1EDD33B800C8BBFF /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FD0A4D1EDD33B800C8BBFF /* Networking.swift */; };
+		11FD0A501EDD39CD00C8BBFF /* AddLocationPinController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FD0A4F1EDD39CD00C8BBFF /* AddLocationPinController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,15 +49,19 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1115DFD51ECA971B007B7D86 /* HelperFuncs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperFuncs.swift; sourceTree = "<group>"; };
-		11354DC31ED6178C00D557B1 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		11013D731EDFC119005FC5A7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		11013D751EE292B1005FC5A7 /* AppData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
+		1115DFD51ECA971B007B7D86 /* HelperFuncs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HelperFuncs.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		111D71CF1EDE021F0058A562 /* Model */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Model; sourceTree = "<group>"; };
+		111D71D01EDE021F0058A562 /* View */ = {isa = PBXFileReference; lastKnownFileType = folder; path = View; sourceTree = "<group>"; };
+		111D71D31EDE034F0058A562 /* AddLocationPinControllerExt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddLocationPinControllerExt.swift; sourceTree = "<group>"; };
+		11354DC31ED6178C00D557B1 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TableViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		11354DC51EDA18B100D557B1 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 		114E00D41EC79FA200E7C863 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		116F2BE21ED2829B006EF863 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		118DE9E41EC7838400AB1B23 /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		118DE9E71EC7838400AB1B23 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		118DE9E71EC7838400AB1B23 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AppDelegate.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		118DE9EE1EC7838400AB1B23 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		118DE9F11EC7838400AB1B23 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		118DE9F31EC7838400AB1B23 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		118DE9F81EC7838500AB1B23 /* OnTheMapTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OnTheMapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		118DE9FC1EC7838500AB1B23 /* OnTheMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnTheMapTests.swift; sourceTree = "<group>"; };
@@ -59,12 +69,14 @@
 		118DEA031EC7838500AB1B23 /* OnTheMapUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OnTheMapUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		118DEA071EC7838500AB1B23 /* OnTheMapUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnTheMapUITests.swift; sourceTree = "<group>"; };
 		118DEA091EC7838500AB1B23 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		118F90061ED3AAA800EC7286 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		118F90061ED3AAA800EC7286 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LoginViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		118F90071ED3AAA800EC7286 /* LoginViewControllerExt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewControllerExt.swift; sourceTree = "<group>"; };
-		118F900A1ED4E0AE00EC7286 /* UserLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserLocation.swift; sourceTree = "<group>"; };
+		118F900A1ED4E0AE00EC7286 /* UserLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = UserLocation.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		11C545941EDFB0F200583137 /* CustomTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 		11FB9D411ECCF4F200A6DCA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		11FD0A481EDCD10300C8BBFF /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		11FD0A4B1EDD2F9500C8BBFF /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Networking.swift; path = ../Networking.swift; sourceTree = "<group>"; };
+		11FD0A481EDCD10300C8BBFF /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MapViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		11FD0A4D1EDD33B800C8BBFF /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
+		11FD0A4F1EDD39CD00C8BBFF /* AddLocationPinController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AddLocationPinController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,20 +137,26 @@
 		118DE9E61EC7838400AB1B23 /* OnTheMap */ = {
 			isa = PBXGroup;
 			children = (
-				11FD0A4B1EDD2F9500C8BBFF /* Networking.swift */,
+				111D71CF1EDE021F0058A562 /* Model */,
+				111D71D01EDE021F0058A562 /* View */,
 				118DE9E71EC7838400AB1B23 /* AppDelegate.swift */,
 				114E00D41EC79FA200E7C863 /* Constants.swift */,
+				118F900A1ED4E0AE00EC7286 /* UserLocation.swift */,
+				11FD0A4D1EDD33B800C8BBFF /* Networking.swift */,
+				1115DFD51ECA971B007B7D86 /* HelperFuncs.swift */,
+				11013D751EE292B1005FC5A7 /* AppData.swift */,
 				11FB9D401ECCF4F200A6DCA8 /* Main.storyboard */,
+				11C545941EDFB0F200583137 /* CustomTabBarController.swift */,
 				118F90061ED3AAA800EC7286 /* LoginViewController.swift */,
-				11354DC31ED6178C00D557B1 /* TableViewController.swift */,
-				11354DC51EDA18B100D557B1 /* CustomTableViewCell.swift */,
 				118F90071ED3AAA800EC7286 /* LoginViewControllerExt.swift */,
 				11FD0A481EDCD10300C8BBFF /* MapViewController.swift */,
-				118F900A1ED4E0AE00EC7286 /* UserLocation.swift */,
+				11354DC31ED6178C00D557B1 /* TableViewController.swift */,
+				11354DC51EDA18B100D557B1 /* CustomTableViewCell.swift */,
+				11FD0A4F1EDD39CD00C8BBFF /* AddLocationPinController.swift */,
+				111D71D31EDE034F0058A562 /* AddLocationPinControllerExt.swift */,
+				11013D721EDFC119005FC5A7 /* LaunchScreen.storyboard */,
 				118DE9EE1EC7838400AB1B23 /* Assets.xcassets */,
-				118DE9F01EC7838400AB1B23 /* LaunchScreen.storyboard */,
 				118DE9F31EC7838400AB1B23 /* Info.plist */,
-				1115DFD51ECA971B007B7D86 /* HelperFuncs.swift */,
 			);
 			path = OnTheMap;
 			sourceTree = "<group>";
@@ -277,7 +295,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				11FB9D421ECCF4F200A6DCA8 /* Main.storyboard in Resources */,
-				118DE9F21EC7838400AB1B23 /* LaunchScreen.storyboard in Resources */,
+				111D71D11EDE021F0058A562 /* Model in Resources */,
+				111D71D21EDE021F0058A562 /* View in Resources */,
+				11013D741EDFC119005FC5A7 /* LaunchScreen.storyboard in Resources */,
 				118DE9EF1EC7838400AB1B23 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -304,15 +324,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				11354DC61EDA18B100D557B1 /* CustomTableViewCell.swift in Sources */,
-				11FD0A4C1EDD2F9500C8BBFF /* Networking.swift in Sources */,
+				11FD0A501EDD39CD00C8BBFF /* AddLocationPinController.swift in Sources */,
+				11FD0A4E1EDD33B800C8BBFF /* Networking.swift in Sources */,
 				118F90081ED3AAA800EC7286 /* LoginViewController.swift in Sources */,
 				118F90091ED3AAA800EC7286 /* LoginViewControllerExt.swift in Sources */,
+				11C545951EDFB0F200583137 /* CustomTabBarController.swift in Sources */,
 				118DE9E81EC7838400AB1B23 /* AppDelegate.swift in Sources */,
+				111D71D41EDE034F0058A562 /* AddLocationPinControllerExt.swift in Sources */,
 				11FD0A491EDCD10300C8BBFF /* MapViewController.swift in Sources */,
 				11354DC41ED6178C00D557B1 /* TableViewController.swift in Sources */,
 				114E00D51EC79FA200E7C863 /* Constants.swift in Sources */,
 				118F900B1ED4E0AE00EC7286 /* UserLocation.swift in Sources */,
 				1115DFD61ECA971B007B7D86 /* HelperFuncs.swift in Sources */,
+				11013D761EE292B1005FC5A7 /* AppData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,10 +372,10 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		118DE9F01EC7838400AB1B23 /* LaunchScreen.storyboard */ = {
+		11013D721EDFC119005FC5A7 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				118DE9F11EC7838400AB1B23 /* Base */,
+				11013D731EDFC119005FC5A7 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
