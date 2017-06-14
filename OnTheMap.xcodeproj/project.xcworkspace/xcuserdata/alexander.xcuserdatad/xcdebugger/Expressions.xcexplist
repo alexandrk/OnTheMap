@@ -82,6 +82,9 @@
          contextName = "MapViewController.viewWillAppear(Bool) -&gt; ():MapViewController.swift">
          <PersistentStrings>
             <PersistentString
+               value = "AppData.sharedInstance.dataUpdatedForMapView">
+            </PersistentString>
+            <PersistentString
                value = "hidesBottomBarWhenPushed">
             </PersistentString>
          </PersistentStrings>
@@ -186,6 +189,14 @@
       </ContextState>
       <ContextState
          contextName = "AddLocationPinController.(submitBtnClick(Any) -&gt; ()).(closure #1):AddLocationPinController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "TableViewController.viewWillAppear(Bool) -&gt; ():TableViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "AppData.sharedInstance.dataUpdatedForTableView">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "LoggedInMapViewController.(viewDidLoad() -&gt; ()).(closure #1):LoggedInMapViewController.swift">

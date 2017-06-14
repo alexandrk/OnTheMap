@@ -22,5 +22,11 @@ class AppData {
     var urlString: String!
     var userRecordParseID: String?
     
+    // Used for syncing data between two tabs (on refresh button press),
+    // and for signaling to refresh, when add new location was used
+    var dataUpdatedForMapView: Bool = false
+    var dataUpdatedForTableView: Bool = false
+    var dataUpdateNeeded: Bool = false
+    
     static let sharedInstance : AppData = AppData()
 }

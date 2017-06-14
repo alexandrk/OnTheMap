@@ -41,6 +41,17 @@ class MapViewController: UIViewController, CustomTabBarControllerDelegate {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if (AppData.sharedInstance.dataUpdatedForMapView) {
+            // remove all annotations from the map
+            self.mapView.removeAnnotations(self.mapView.annotations)
+            self.populateMapWithPins()
+            AppData.sharedInstance.dataUpdatedForMapView = false
+        }
+    }
+    
     /// CustomTabBarControllerProtocol function implementation
     func refreshBtnPressed(_ sender: AnyObject) {
 
@@ -52,6 +63,9 @@ class MapViewController: UIViewController, CustomTabBarControllerDelegate {
         
         // request new data and populate the map
         getPinDataAndPopulateMap()
+        
+        // Used to indicate that refresh of the tableView is needed, when it is going to be loaded
+        AppData.sharedInstance.dataUpdatedForTableView = true
         
     }
     

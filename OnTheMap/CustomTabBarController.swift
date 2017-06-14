@@ -24,6 +24,15 @@ class CustomTabBarController: UITabBarController {
         setupNavigationBar()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Trigger data update, if Add New Pin Controller was used
+        if (AppData.sharedInstance.dataUpdateNeeded) {
+            self.refreshBtnPressed(NSObject())
+        }
+    }
+    
     func setupNavigationBar() {
     
         navigationItem.title = "ON THE MAP"

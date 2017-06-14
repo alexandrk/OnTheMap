@@ -24,6 +24,15 @@ class TableViewController : UIViewController, UITableViewDataSource, UITableView
         tabBarController.customDelegate = self
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if (AppData.sharedInstance.dataUpdatedForTableView) {
+            tableView.reloadData()
+            AppData.sharedInstance.dataUpdatedForTableView = false
+        }
+    }
+    
     override func viewDidLoad() {
         
         // If data has not been loaded yet, request it
@@ -98,6 +107,9 @@ class TableViewController : UIViewController, UITableViewDataSource, UITableView
         self.activityIndicator.startAnimating()
         
         getPinDataAndRefreshTable()
+        
+        // Used to indicate that refresh of the mapView is needed, when it is going to be loaded
+        AppData.sharedInstance.dataUpdatedForMapView = true
     }
     
     /**

@@ -253,6 +253,9 @@ class AddLocationPinController : UIViewController {
                 // Stop Activity Indicator
                 self.activityIndicator.stopAnimating()
                 
+                // Used to trigger the data update, when either MapView or TableView is loaded
+                AppData.sharedInstance.dataUpdateNeeded = true
+                
                 if (self.navigationController != nil) {
                     self.navigationController!.popViewController(animated: true)
                 }
