@@ -1,5 +1,5 @@
 //
-//  helperFuncs.swift
+//  HelperFuncs.swift
 //  OnTheMap
 //
 //  Created by Alexander on 5/15/17.
@@ -55,10 +55,5 @@ class HelperFuncs {
         }
         task.resume()
     }
-    
-//    static func sendError(_ error: String, _ completionHandler : (_ result: AnyObject?, _ error: NSError?) -> Void) {
-//        let userInfo = [NSLocalizedDescriptionKey : error]
-//        completionHandler(nil, NSError(domain: #function, code: 1, userInfo: userInfo))
-//    }
     
 }

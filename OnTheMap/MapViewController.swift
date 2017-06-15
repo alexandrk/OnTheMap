@@ -28,8 +28,6 @@ class MapViewController: UIViewController, CustomTabBarControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        mapView.delegate = self
-        
         // If data has not been loaded yet, request it
         if AppData.sharedInstance.arrayOfLocations == nil {
             
@@ -78,8 +76,6 @@ class MapViewController: UIViewController, CustomTabBarControllerDelegate {
             guard
                 let latitude = location.latitude,
                 let longitude = location.longitude else {
-//                    print("----| Missing Location Data |----")
-//                    print(location)
                     continue
             }
             let clLocation = CLLocationCoordinate2DMake(latitude, longitude)

@@ -23,16 +23,16 @@ struct UserLocation {
     "updatedAt": "2015-03-09T22:04:50.315Z"
      */
 
-    var firstName : String?
-    var lastName  : String?
-    var latitude  : Double?
-    var longitude : Double?
-    var mapString : String?
-    var mediaURL  : String?
-    var parseID   : String
-    var udacityID : String?
-    var createdAt : String
-    var updatedAt : String
+    let firstName : String?
+    let lastName  : String?
+    let latitude  : Double?
+    let longitude : Double?
+    let mapString : String?
+    let mediaURL  : String?
+    let parseID   : String
+    let udacityID : String?
+    let createdAt : String
+    let updatedAt : String
     
     // construct a UserLocation from a dictionary object
     init(dictionary: [String:AnyObject]) {
