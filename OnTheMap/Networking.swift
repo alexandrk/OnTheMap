@@ -23,7 +23,7 @@ class Networking : NSObject {
     
     // MARK: Initializers
     
-    override init() {
+    override init(){
         super.init()
     }
 
@@ -40,9 +40,9 @@ class Networking : NSObject {
             (urlString == Constants.UdacitySessionIDURL)
                 || (urlString.contains(Constants.UdacityUserProfileURL)) ? true : false
         
-        let task = URLSession.shared.dataTask(with: request as URLRequest) { data, response, error in
+        let task = URLSession.shared.dataTask(with: request as URLRequest){ data, response, error in
             
-            func sendError(_ error: String) {
+            func sendError(_ error: String){
                 //print(error)
                 let userInfo = [NSLocalizedDescriptionKey : error]
                 completionHandlerForGET(nil, NSError(domain: "taskForGetMethod", code: 1, userInfo: userInfo))
@@ -68,7 +68,7 @@ class Networking : NSObject {
             }
             
             var newData = data
-            if (udacityStripFirst5Characters) {
+            if (udacityStripFirst5Characters){
                 // Striping away security purpose characters (as per API instructions)
                 let range = Range(5..<data.count)
                 newData = data.subdata(in: range)
@@ -97,7 +97,7 @@ class Networking : NSObject {
         request.httpMethod = httpMethod
 
         // Add extra headers for parse requests
-        if urlString.contains(Constants.UdacityPostUserDataURL) {
+        if urlString.contains(Constants.UdacityPostUserDataURL){
             request.addValue(Constants.ParseApplicationID, forHTTPHeaderField: "X-Parse-Application-Id")
             request.addValue(Constants.ParseAPIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
         }
@@ -107,9 +107,9 @@ class Networking : NSObject {
         
         request.httpBody = jsonData.data(using: .utf8)
         
-        let task = URLSession.shared.dataTask(with: request as URLRequest) { data, response, error in
+        let task = URLSession.shared.dataTask(with: request as URLRequest){ data, response, error in
 
-            func sendError(_ error: String) {
+            func sendError(_ error: String){
                 let userInfo = [NSLocalizedDescriptionKey : error]
                 completionHandlerForPOST(nil, NSError(domain: "taskForPostPutMethod", code: 1, userInfo: userInfo))
             }
@@ -134,7 +134,7 @@ class Networking : NSObject {
             }
             
             var newData = data
-            if (udacityStripFirst5Characters) {
+            if (udacityStripFirst5Characters){
                 // Striping away security purpose characters (as per API instructions)
                 let range = Range(5..<data.count)
                 newData = data.subdata(in: range)
@@ -144,6 +144,58 @@ class Networking : NSObject {
             self.convertDataWithCompletionHandler(newData, completionHandlerForConvertData: completionHandlerForPOST)
         }
         task.resume()
+    }
+    
+    /**
+        Helper Function for handling networking when login button is pressed
+    */
+    func loginClickHandler(
+        loginFieldValue: String?,
+        passwordFieldValue: String?,
+        callbackFunction: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void){
+        
+        // Check if both fields are filled out, present alert, if either one is empty
+        guard
+            let login =  loginFieldValue, !loginFieldValue!.isEmpty,
+            let password = passwordFieldValue, !passwordFieldValue!.isEmpty
+        else {
+            callbackFunction(nil, NSError(domain: "\(#function) fields check",
+                                          code: 0,
+                                          userInfo: [NSLocalizedDescriptionKey: "Empty Email or Password"]))
+            return
+        }
+        
+        // Create JSON Body from the login fields
+        let jsonBody =
+            "{ \"udacity\": " +
+                "{" +
+                "\"\(Constants.UdacityRequestLogin)\" : \"\(login)\"," +
+                "\"\(Constants.UdacityRequestPassword)\" : \"\(password)\"" +
+                "}" +
+        "}"
+        
+        taskForPostPutMethod(httpMethod: "POST",
+                             urlString: Constants.UdacitySessionIDURL,
+                             jsonData: jsonBody){ result, error in
+            
+            if let error = error {
+                if error.localizedDescription.contains("Status Code: 403"){
+                    callbackFunction(nil,
+                                     NSError(domain: "\(#function) error making a request", code: 0,
+                                             userInfo: [NSLocalizedDescriptionKey: "Account doesn't exist\nOr invalid credetials entered"]))
+                }
+                else {
+                    print(error)
+                    print(result ?? "[[No Data Returned]]")
+                    callbackFunction(nil,
+                                     NSError(domain: "\(#function) \(#function) error making a request", code: 0,
+                                             userInfo: [NSLocalizedDescriptionKey: "Something went wrong. Please try again."]))
+                }
+                return
+            }
+                                
+            callbackFunction(result, nil)
+        }
     }
     
     // given raw JSON, return a usable Foundation object

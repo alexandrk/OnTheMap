@@ -23,12 +23,10 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var txtPassword: UITextField!
     @IBOutlet weak var btnUdacityLogin: UIButton!
     @IBOutlet weak var tvDontHaveAccount: UITextView!
-    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var containerView: UIView!
+    var containerViewOrigin: CGPoint!
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-        // Disables scroll view (only enabled, when keyboard is shown)
-        self.scrollView.isScrollEnabled = false
+    override func viewWillAppear(_ animated: Bool){
         
         //Round corners for login button
         self.btnUdacityLogin.layer.cornerRadius = Constants.ButtonCornerRadius
@@ -52,7 +50,7 @@ class LoginViewController: UIViewController {
         
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool){
         super.viewWillDisappear(animated)
         
         // Unsubscribe from keyboard events
@@ -89,47 +87,26 @@ class LoginViewController: UIViewController {
      */
     @IBAction func loginClick(_ sender: AnyObject)
     {
-        
-        // Check if both fields are filled out, present alert, if either one is empty
-        guard let loginFieldValue =  txtEmail.text, !loginFieldValue.isEmpty,
-            let passwordFIeldValue = txtPassword.text, !passwordFIeldValue.isEmpty
-        else {
-            HelperFuncs.showAlert(self, message: "Empty Email or Password")
-            return
-        }
-        
-        // Create JSON Body from the login fields
-        let jsonBody =
-            "{ \"udacity\": " +
-                "{" +
-                    "\"\(Constants.UdacityRequestLogin)\" : \"\(loginFieldValue)\"," +
-                    "\"\(Constants.UdacityRequestPassword)\" : \"\(passwordFIeldValue)\"" +
-                "}" +
-            "}"
-
-        // Start Acrivity Indicator, before making a Network request
+        // Start Activity Indicator, before making a Network request
         self.activityIndicator.startAnimating()
         
-        Networking.sharedInstance.taskForPostPutMethod(
-        httpMethod: "POST",
-        urlString: Constants.UdacitySessionIDURL,
-        jsonData: jsonBody){
+        Networking.sharedInstance.loginClickHandler(loginFieldValue: txtEmail.text, passwordFieldValue: txtPassword.text){
             result, error in
             
-            // Stop Acrivity Indicator, when call back is called
-            HelperFuncs.performUIUpdatesOnMain {
-                self.activityIndicator.stopAnimating()
-            }
+            // Stop Activity Indicator
+            self.activityIndicator.stopAnimating()
             
             if let error = error {
-                if error.localizedDescription.contains("Status Code: 403") {
-                    HelperFuncs.showAlert(self, message: "Account doesn't exist\nOr invalid credetials entered")
-                }
-                else {
-                    print(error)
-                    print(result ?? "[[No Data Returned]]")
-                    HelperFuncs.showAlert(self, message: "Something went wrong. Please try again.")
-                }
+                print(error.domain)
+                HelperFuncs.showAlert(self, message: error.localizedDescription)
+                return
+            }
+            
+            // At this poin `result` should never be nil
+            if result == nil {
+                print("\(#function) line #\(#line). `result` should never be nil")
+                HelperFuncs.showAlert(self, message: "Something went wrong.\nPlease try again.")
+                return
             }
             
             // If account exists and all is good, save the credentials to AppData.SharedInstance
@@ -152,9 +129,11 @@ class LoginViewController: UIViewController {
                     }
                     self.present(vc, animated: true, completion: nil)
                 }
-                
             }
         }
+        
+        
+        
     }
     
 }
