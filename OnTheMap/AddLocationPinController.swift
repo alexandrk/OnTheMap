@@ -15,6 +15,7 @@ class AddLocationPinController : UIViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var centerView: UIView!
     
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var locationStringField: UITextField!
@@ -37,9 +38,11 @@ class AddLocationPinController : UIViewController {
     @IBOutlet weak var findOmMapBtnLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var findOmMapBtnTrailingConstraint: NSLayoutConstraint!
     
-    var fullUserProvidedAddress : String?
+    var scrollViewOrigin: CGPoint!
+    var mapViewShown: Bool = false
+    private var fullUserProvidedAddress : String?
     
-    override func viewWillAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool){
         
         // Subscribe to keyboard events (keyboardWill[Show|Hide]), used to shift view
         // to display the bottom text field, while entering text into it
@@ -47,18 +50,39 @@ class AddLocationPinController : UIViewController {
         
         // Disables scroll view (only enabled, when keyboard is shown)
         self.scrollView.isScrollEnabled = false
+        scrollViewOrigin = scrollView.frame.origin
         
         // Setup input fields delegates (needed for keyboard show/hide events)
         locationStringField.delegate = self
         urlStringField.delegate = self
         
-        createCustomBorder(for: urlStringField)
-        
-        customTextViewString()
+        // Adds a listener for the orientation change event
+        NotificationCenter.default.addObserver(self, selector: #selector(setCustomLayoutBasedOnOrientation), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+
+        setCustomLayoutBasedOnOrientation()
         
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
+    /**
+        Helper Function, sets UIElements, based on current screen orientation
+    */
+    func setCustomLayoutBasedOnOrientation(){
+        
+        if (!mapViewShown){
+            if (UIDeviceOrientationIsLandscape(UIDevice.current.orientation)){
+                textViewHeightConstraint.constant = 70
+                customTextViewString(withNewLine: false)
+            }
+            else {
+                textViewHeightConstraint.constant = 135
+                customTextViewString(withNewLine: true)
+            }
+        }
+        else {
+            createCustomBorder(for: urlStringField)
+        }
+    }
+    override func viewWillDisappear(_ animated: Bool){
         super.viewWillDisappear(animated)
         
         // Clean up
@@ -72,7 +96,7 @@ class AddLocationPinController : UIViewController {
         self.navigationController?.view.backgroundColor = nil
     }
     
-    override func viewDidLoad() {
+    override func viewDidLoad(){
         super.viewDidLoad()
         
         // Making navigation bar transparent
@@ -92,7 +116,7 @@ class AddLocationPinController : UIViewController {
     }
     
     /// Requred to add round corners for the buttons
-    override func viewDidLayoutSubviews() {
+    override func viewDidLayoutSubviews(){
         //Round corners for buttons
         findOnMapButton.layer.cornerRadius = Constants.ButtonCornerRadius
         findOnMapButton.layer.masksToBounds = true
@@ -105,9 +129,12 @@ class AddLocationPinController : UIViewController {
      Triggers different `cancel` effects, based on which state the controller is in.
      Enter location state **OR** Enter URL state
      */
-    func cancelButtonAction(_ sender: AnyObject) {
+    func cancelButtonAction(_ sender: AnyObject){
         
-        if submitBtn.alpha == 1 && !submitBtn.isHidden {
+        view.endEditing(true)
+        
+        if mapViewShown {
+            mapViewShown = false
             transitionToLocation()
         }
         else {
@@ -120,7 +147,7 @@ class AddLocationPinController : UIViewController {
         Looks up entered location and picks the first result out of a returned array.
         Shows an error message, if no results where returned for the specified address.
     */
-    @IBAction func findOnMapBtnClick(_ sender: Any) {
+    @IBAction func findOnMapBtnClick(_ sender: Any){
         
         guard let address = locationStringField.text else {
             HelperFuncs.showAlert(self, message: "Please enter the address")
@@ -132,7 +159,7 @@ class AddLocationPinController : UIViewController {
         self.activityIndicator.startAnimating()
         
         let geocoder = CLGeocoder()
-        geocoder.geocodeAddressString(AppData.sharedInstance.locationString) {
+        geocoder.geocodeAddressString(AppData.sharedInstance.locationString){
             placemarks, error in
             
             /// Local helper function to display error during the request
@@ -185,6 +212,7 @@ class AddLocationPinController : UIViewController {
             // Transition to map and url field
             HelperFuncs.performUIUpdatesOnMain {
                 self.transitionToMap()
+                self.createCustomBorder(for: self.urlStringField)
                 
                 // Stop Activity Indicator
                 self.activityIndicator.stopAnimating()
@@ -196,8 +224,7 @@ class AddLocationPinController : UIViewController {
      Helper function, used in findOnMapBtnClick IBAction
      - Returns: A new annotation based on information provided
      */
-    private func createLocationPin(placemark: CLPlacemark, title: String?, subtitle: String?) -> MKPointAnnotation
-    {
+    private func createLocationPin(placemark: CLPlacemark, title: String?, subtitle: String?) -> MKPointAnnotation{
         // Create Annotation and add it to the map
         let annotation = MKPointAnnotation()
         annotation.coordinate = (placemark.location?.coordinate)!
@@ -214,7 +241,7 @@ class AddLocationPinController : UIViewController {
     /**
         Saves entered location and url information, associated with udacity userID back to the server
     */
-    @IBAction func submitBtnClick(_ sender: Any) {
+    @IBAction func submitBtnClick(_ sender: Any){
         
         // 1. Verify URL field is not empty and is in the correct format
         if let urlString = self.urlStringField.text {
@@ -256,7 +283,7 @@ class AddLocationPinController : UIViewController {
                 // Used to trigger the data update, when either MapView or TableView is loaded
                 AppData.sharedInstance.dataUpdateNeeded = true
                 
-                if (self.navigationController != nil) {
+                if (self.navigationController != nil){
                     self.navigationController!.popViewController(animated: true)
                 }
                 
@@ -369,7 +396,7 @@ class AddLocationPinController : UIViewController {
         Creates bottom single line white border for specified field
         - Parameter field: field to set the border for
     */
-    private func createCustomBorder(for field : UITextField) {
+    private func createCustomBorder(for field : UITextField){
         let border = CALayer()
         let width = CGFloat(1.0)
         border.borderColor = UIColor.white.cgColor
@@ -401,7 +428,7 @@ class AddLocationPinController : UIViewController {
             self.containerView.backgroundColor = Constants.Colors.lightBlue
             
             // 2. Show Map
-            self.self.mapView.alpha = 1
+            self.mapView.alpha = 1
             
             // 3. Animate textfield for url
             self.urlStringField.alpha = 1
@@ -422,10 +449,10 @@ class AddLocationPinController : UIViewController {
             self.findOmMapBtnBottomConstraint.constant = 35     //orig: 70; new = 35
             self.findOmMapBtnTopConstraint.constant = 59        //orig: 24; new orig + 35 (59)
             
+            self.mapViewShown = true
+            
             self.view.layoutIfNeeded()
         })
-//        { success in
-//        }
         
     }
     
@@ -448,10 +475,10 @@ class AddLocationPinController : UIViewController {
             self.textView.alpha = 1
             self.enterURLLabel.alpha = 0
             self.containerView.backgroundColor = Constants.Colors.greyish
-            self.customTextViewString()
+            self.setCustomLayoutBasedOnOrientation()
             
             // 2. Show Map
-            self.self.mapView.alpha = 0
+            self.mapView.alpha = 0
             
             // 3. Animate textfield for url
             self.urlStringField.alpha = 0
@@ -475,8 +502,6 @@ class AddLocationPinController : UIViewController {
             
             self.view.layoutIfNeeded()
         })
-//        { success in
-//        }
         
     }
     
@@ -484,9 +509,13 @@ class AddLocationPinController : UIViewController {
         Helper function used to setup desired styling of the text in the textView area
         _"Where are you studying today"_ text
     */
-    private func customTextViewString(){
+    private func customTextViewString(withNewLine: Bool){
+        
+        // Determines which string to use (inline string used in landscape mode, for better layout)
+        let useString = (withNewLine) ? Constants.WhereAreYouText : Constants.WhereAreYouTextInline
+        
         // Do custom styling for text in the textView
-        let whereAreYouAS = NSMutableAttributedString(string: Constants.WhereAreYouText)
+        let whereAreYouAS = NSMutableAttributedString(string: useString)
         let foundRange = whereAreYouAS.mutableString.range(of: Constants.WhereAreYouBold)
         
         // Font size attribute. Size needs to be set programatically, since we are using custom attributes for the textView

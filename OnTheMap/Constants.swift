@@ -22,6 +22,7 @@ struct Constants
     
     // * Add Location Page
     static let WhereAreYouText = "Where are you\nstudying\ntoday?"
+    static let WhereAreYouTextInline = "Where are you studying today?"
     static let WhereAreYouBold = "studying"
     static let WhereAreYouFont = UIFont(descriptor: UIFontDescriptor(name: "System", size: CGFloat(30) ), size: CGFloat(30))
     static let WhereAreYouBoldFont = UIFont.boldSystemFont(ofSize: 30)
