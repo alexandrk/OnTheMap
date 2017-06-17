@@ -18,8 +18,8 @@ class MapViewController: UIViewController, CustomTabBarControllerDelegate {
     override func viewDidAppear(_ animated: Bool) {
         // Setting up a custom delegate field for CustomTabBarController
         // Controlls which view to apply the buttons in the navigation bar to
-        guard let tabBarController = self.parent as? CustomTabBarController else {
-            print("Couldn't cast 'self.parent' as 'CustomTabBarController'")
+        guard let tabBarController = parent as? CustomTabBarController else {
+            print("Couldn't cast 'parent' as 'CustomTabBarController'")
             return
         }
         tabBarController.customDelegate = self
@@ -32,10 +32,10 @@ class MapViewController: UIViewController, CustomTabBarControllerDelegate {
         if AppData.sharedInstance.arrayOfLocations == nil {
             
             // Request Pin data
-            self.getPinDataAndPopulateMap()
+            getPinDataAndPopulateMap()
         }
         else {
-            self.populateMapWithPins()
+            populateMapWithPins()
         }
     }
     
@@ -44,8 +44,8 @@ class MapViewController: UIViewController, CustomTabBarControllerDelegate {
         
         if (AppData.sharedInstance.dataUpdatedForMapView) {
             // remove all annotations from the map
-            self.mapView.removeAnnotations(self.mapView.annotations)
-            self.populateMapWithPins()
+            mapView.removeAnnotations(mapView.annotations)
+            populateMapWithPins()
             AppData.sharedInstance.dataUpdatedForMapView = false
         }
     }
@@ -57,7 +57,7 @@ class MapViewController: UIViewController, CustomTabBarControllerDelegate {
         AppData.sharedInstance.arrayOfLocations = nil
         
         // remove all annotations from the map
-        self.mapView.removeAnnotations(self.mapView.annotations)
+        mapView.removeAnnotations(mapView.annotations)
         
         // request new data and populate the map
         getPinDataAndPopulateMap()
@@ -120,7 +120,7 @@ class MapViewController: UIViewController, CustomTabBarControllerDelegate {
     internal func getPinDataAndPopulateMap()
     {
         // Start activity indicator
-        self.activityIndicator.startAnimating()
+        activityIndicator.startAnimating()
         
         Networking.sharedInstance.taskForGetMethod(urlString: Constants.UdacityParseDataURL) {
             result, error in

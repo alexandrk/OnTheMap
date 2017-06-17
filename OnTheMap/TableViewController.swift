@@ -17,8 +17,8 @@ class TableViewController : UIViewController, UITableViewDataSource, UITableView
     override func viewDidAppear(_ animated: Bool) {
         // Setting up a custom delegate field for CustomTabBarController
         // Controlls which view to apply the buttons in the navigation bar to
-        guard let tabBarController = self.parent as? CustomTabBarController else {
-            print("Couldn't cast 'self.parent' as 'CustomTabBarController'")
+        guard let tabBarController = parent as? CustomTabBarController else {
+            print("Couldn't cast 'parent' as 'CustomTabBarController'")
             return
         }
         tabBarController.customDelegate = self
@@ -39,10 +39,10 @@ class TableViewController : UIViewController, UITableViewDataSource, UITableView
         if AppData.sharedInstance.arrayOfLocations == nil {
             
             // Request Pin data
-            self.getPinDataAndRefreshTable()
+            getPinDataAndRefreshTable()
         }
         else {
-            self.tableView.reloadData()
+            tableView.reloadData()
         }
     }
     
@@ -104,7 +104,7 @@ class TableViewController : UIViewController, UITableViewDataSource, UITableView
         
         // Request new data and refresh table on success
         // Start activity indicator
-        self.activityIndicator.startAnimating()
+        activityIndicator.startAnimating()
         
         getPinDataAndRefreshTable()
         

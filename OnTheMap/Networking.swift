@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class Networking : NSObject {
+class Networking {
     
     // MARK: Properties
     
@@ -20,12 +20,6 @@ class Networking : NSObject {
     var userID: String! = nil
     var sessionID: String! = nil
     var requestToken: String! = nil
-    
-    // MARK: Initializers
-    
-    override init(){
-        super.init()
-    }
 
     func taskForGetMethod(
         urlString : String,

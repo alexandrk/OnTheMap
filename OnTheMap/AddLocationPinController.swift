@@ -49,7 +49,7 @@ class AddLocationPinController : UIViewController {
         subscribeToKeyboardNotifications()
         
         // Disables scroll view (only enabled, when keyboard is shown)
-        self.scrollView.isScrollEnabled = false
+        scrollView.isScrollEnabled = false
         scrollViewOrigin = scrollView.frame.origin
         
         // Setup input fields delegates (needed for keyboard show/hide events)
@@ -89,28 +89,28 @@ class AddLocationPinController : UIViewController {
         unsubscribeFromKeyboardNotifications()
         
         // Make the navigation bar solid again
-        self.navigationItem.hidesBackButton = false
-        self.navigationController?.navigationBar.setBackgroundImage(nil, for: UIBarMetrics.default)
-        self.navigationController?.navigationBar.shadowImage = nil
-        self.navigationController?.navigationBar.isTranslucent = false
-        self.navigationController?.view.backgroundColor = nil
+        navigationItem.hidesBackButton = false
+        navigationController?.navigationBar.setBackgroundImage(nil, for: UIBarMetrics.default)
+        navigationController?.navigationBar.shadowImage = nil
+        navigationController?.navigationBar.isTranslucent = false
+        navigationController?.view.backgroundColor = nil
     }
     
     override func viewDidLoad(){
         super.viewDidLoad()
         
         // Making navigation bar transparent
-        self.navigationItem.hidesBackButton = true
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        self.navigationController?.navigationBar.isTranslucent = true
-        self.navigationController?.view.backgroundColor = UIColor.clear
+        navigationItem.hidesBackButton = true
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.view.backgroundColor = UIColor.clear
         
         // Adding a Cancel button to right side of the navBar
         let cancelButton = UIBarButtonItem(title: "Cancel",
                                            style: .plain,
                                            target: self,
-                                           action: #selector(self.cancelButtonAction(_:)))
+                                           action: #selector(cancelButtonAction(_:)))
         cancelButton.tintColor = Constants.Colors.darkBlue
         navigationItem.setRightBarButton(cancelButton, animated: false)
     }
@@ -138,7 +138,7 @@ class AddLocationPinController : UIViewController {
             transitionToLocation()
         }
         else {
-            self.navigationController!.popViewController(animated: true)
+            navigationController!.popViewController(animated: true)
         }
     }
     
@@ -156,7 +156,7 @@ class AddLocationPinController : UIViewController {
         AppData.sharedInstance.locationString = address
         
         // Start Activity Indicator
-        self.activityIndicator.startAnimating()
+        activityIndicator.startAnimating()
         
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(AppData.sharedInstance.locationString){
@@ -244,7 +244,7 @@ class AddLocationPinController : UIViewController {
     @IBAction func submitBtnClick(_ sender: Any){
         
         // 1. Verify URL field is not empty and is in the correct format
-        if let urlString = self.urlStringField.text {
+        if let urlString = urlStringField.text {
             if let _ = urlString.range(of: "^(https?://)([a-zA-Z0-9\\.-]+)\\.([a-zA-Z0-9\\.]{2,6})",
                options: .regularExpression,
                range: nil,
@@ -259,13 +259,13 @@ class AddLocationPinController : UIViewController {
         }
         
         // Start Activity Indicator
-        self.activityIndicator.startAnimating()
+        activityIndicator.startAnimating()
         
         // 2. Get Udacity Profile Inormation
         guard let userID = AppData.sharedInstance.userID else {
             
             // Stop Activity Indicator
-            self.activityIndicator.stopAnimating()
+            activityIndicator.stopAnimating()
             
             HelperFuncs.showAlert(self, message: "No Udacity User ID found.\nCannot continue.")
             return
@@ -415,7 +415,7 @@ class AddLocationPinController : UIViewController {
     func transitionToMap(){
         
         // 0. Changes to navigation bar Cancel button
-        let cancelButton = self.navigationItem.rightBarButtonItem
+        let cancelButton = navigationItem.rightBarButtonItem
         cancelButton?.tintColor = UIColor.white
         cancelButton?.title = "Back"
         
@@ -462,7 +462,7 @@ class AddLocationPinController : UIViewController {
     func transitionToLocation(){
         
         // 0. Changes to navigation bar Cancel button
-        let cancelButton = self.navigationItem.rightBarButtonItem
+        let cancelButton = navigationItem.rightBarButtonItem
         cancelButton?.tintColor = Constants.Colors.darkBlue
         cancelButton?.title = "Cancel"
         

@@ -29,8 +29,8 @@ class LoginViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool){
         
         //Round corners for login button
-        self.btnUdacityLogin.layer.cornerRadius = Constants.ButtonCornerRadius
-        //self.btnUdacityLogin.layer.masksToBounds = true
+        btnUdacityLogin.layer.cornerRadius = Constants.ButtonCornerRadius
+        //btnUdacityLogin.layer.masksToBounds = true
         
         // Subscribe to keyboard events (keyboardWill[Show|Hide]), used to shift view
         // to display the bottom text field, while entering text into it
@@ -88,7 +88,7 @@ class LoginViewController: UIViewController {
     @IBAction func loginClick(_ sender: AnyObject)
     {
         // Start Activity Indicator, before making a Network request
-        self.activityIndicator.startAnimating()
+        activityIndicator.startAnimating()
         
         Networking.sharedInstance.loginClickHandler(loginFieldValue: txtEmail.text, passwordFieldValue: txtPassword.text){
             result, error in

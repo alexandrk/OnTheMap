@@ -29,7 +29,7 @@ class CustomTabBarController: UITabBarController {
         
         // Trigger data update, if Add New Pin Controller was used
         if (AppData.sharedInstance.dataUpdateNeeded) {
-            self.refreshBtnPressed(NSObject())
+            refreshBtnPressed(NSObject())
         }
     }
     
@@ -39,15 +39,15 @@ class CustomTabBarController: UITabBarController {
         let logOutButton = UIBarButtonItem(title: "LOGOUT",
                                            style: .done,
                                            target: self,
-                                           action: #selector(self.logOut))
+                                           action: #selector(logOut))
         navigationItem.setLeftBarButtonItems([logOutButton], animated: true)
         
         let refreshButton = UIBarButtonItem(barButtonSystemItem: .refresh,
                                             target: self,
-                                            action: #selector(self.refreshBtnPressed))
+                                            action: #selector(refreshBtnPressed))
         let addItemButton = UIBarButtonItem(barButtonSystemItem: .add,
                                             target: self,
-                                            action: #selector(self.addLocationItem))
+                                            action: #selector(addLocationItem))
         navigationItem.setRightBarButtonItems([refreshButton, addItemButton], animated: true)
         
     }
@@ -59,7 +59,7 @@ class CustomTabBarController: UITabBarController {
     }
     
     func refreshBtnPressed(_ sender: AnyObject){
-        self.customDelegate?.refreshBtnPressed(sender)
+        customDelegate?.refreshBtnPressed(sender)
         //printCurrentTab()
     }
     
@@ -75,7 +75,7 @@ class CustomTabBarController: UITabBarController {
             }
         }
         
-        guard let currentViewController = self.customDelegate as? UIViewController else {
+        guard let currentViewController = customDelegate as? UIViewController else {
             print("Could cast deletegate as UIViewController")
             print(printCurrentTab())
             return
@@ -127,10 +127,10 @@ class CustomTabBarController: UITabBarController {
     }
     
     internal func printCurrentTab(){
-        if (self.customDelegate as? MapViewController) != nil {
+        if (customDelegate as? MapViewController) != nil {
             print("mapView")
         }
-        else if (self.customDelegate as? TableViewController) != nil {
+        else if (customDelegate as? TableViewController) != nil {
             print("tableView")
         }
         else {
