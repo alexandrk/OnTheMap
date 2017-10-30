@@ -74,7 +74,7 @@ struct Constants
         static let darkBlue = UIColor(red:0.08, green:0.26, blue:0.45, alpha:1.0)
         static let lightBlue = UIColor(red:0.31, green:0.53, blue:0.71, alpha:1.0)
         static let greyish = UIColor(red:0.88, green:0.88, blue:0.88, alpha:1.0)
-        static let whiteSeeThrough = UIColor(colorLiteralRed: 1, green: 1, blue: 1, alpha: 0.7)
+        static let whiteSeeThrough = UIColor(red: 1, green: 1, blue: 1, alpha: 0.7)
     }
     
     struct UserData {
