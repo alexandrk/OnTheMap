@@ -29,7 +29,7 @@ extension AddLocationPinController : UITextFieldDelegate {
         return true
     }
     
-    func keyboardWillShow(notification: NSNotification){
+    @objc func keyboardWillShow(notification: NSNotification){
         
         if let userInfo = notification.userInfo {
             if let keyboardFrame = userInfo[UIKeyboardFrameEndUserInfoKey] as? CGRect {
@@ -66,7 +66,7 @@ extension AddLocationPinController : UITextFieldDelegate {
         
     }
     
-    func keyboardWillHide(notification: NSNotification){
+    @objc func keyboardWillHide(notification: NSNotification){
         if (scrollView.frame.origin.y != scrollViewOrigin!.y){
             scrollView.frame.origin.y = scrollViewOrigin!.y
         }

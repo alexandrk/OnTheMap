@@ -68,14 +68,14 @@ class LoginViewController: UIViewController {
         let fullStringRange     = NSMakeRange(0, dontHaveAccountAS.length)
         
         // Creating a link for a given part of the string
-        dontHaveAccountAS.addAttribute(NSLinkAttributeName,
+        dontHaveAccountAS.addAttribute(NSAttributedStringKey.link,
                                        value: URL(string: Constants.UdacityCreateAccountURL)!, range: foundRange)
         
         // Set alignment and font size
         let paragraph = NSMutableParagraphStyle()
         paragraph.alignment = .center
-        dontHaveAccountAS.addAttribute(NSParagraphStyleAttributeName, value: paragraph, range: fullStringRange)
-        dontHaveAccountAS.addAttribute(NSFontAttributeName, value: Constants.DontHaveAnAccountFont, range: fullStringRange)
+        dontHaveAccountAS.addAttribute(NSAttributedStringKey.paragraphStyle, value: paragraph, range: fullStringRange)
+        dontHaveAccountAS.addAttribute(NSAttributedStringKey.font, value: Constants.DontHaveAnAccountFont, range: fullStringRange)
         
         //Add attributed string to the textView
         tvDontHaveAccount.attributedText = dontHaveAccountAS

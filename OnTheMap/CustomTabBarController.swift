@@ -52,18 +52,18 @@ class CustomTabBarController: UITabBarController {
         
     }
     
-    public func logOut() {
+    @objc public func logOut() {
         HelperFuncs.logOut{
             self.dismiss(animated: true, completion: nil)
         }
     }
     
-    func refreshBtnPressed(_ sender: AnyObject){
+    @objc func refreshBtnPressed(_ sender: AnyObject){
         customDelegate?.refreshBtnPressed(sender)
         //printCurrentTab()
     }
     
-    func addLocationItem(_ overwrite: Bool = false){
+    @objc func addLocationItem(_ overwrite: Bool = false){
         
         // Check to see, if overwrite flag is set, so we can skip the section and continue
         if overwrite == false {

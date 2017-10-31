@@ -66,7 +66,7 @@ class AddLocationPinController : UIViewController {
     /**
         Helper Function, sets UIElements, based on current screen orientation
     */
-    func setCustomLayoutBasedOnOrientation(){
+    @objc func setCustomLayoutBasedOnOrientation(){
         
         if (!mapViewShown){
             if (UIDeviceOrientationIsLandscape(UIDevice.current.orientation)){
@@ -129,7 +129,7 @@ class AddLocationPinController : UIViewController {
      Triggers different `cancel` effects, based on which state the controller is in.
      Enter location state **OR** Enter URL state
      */
-    func cancelButtonAction(_ sender: AnyObject){
+    @objc func cancelButtonAction(_ sender: AnyObject){
         
         view.endEditing(true)
         
@@ -521,22 +521,22 @@ class AddLocationPinController : UIViewController {
         // Font size attribute. Size needs to be set programatically, since we are using custom attributes for the textView
         let allStringRange = NSMakeRange(0, whereAreYouAS.length)
         
-        whereAreYouAS.addAttribute(NSFontAttributeName,
+        whereAreYouAS.addAttribute(NSAttributedStringKey.font,
                                    value: Constants.WhereAreYouFont,
                                    range: allStringRange)
-        whereAreYouAS.addAttribute(NSForegroundColorAttributeName,
+        whereAreYouAS.addAttribute(NSAttributedStringKey.foregroundColor,
                                    value: Constants.Colors.darkBlue,
                                    range: allStringRange)
         
         // Aligning text programatically, since we are using custom attributes for the textView
         let paragraph = NSMutableParagraphStyle()
         paragraph.alignment = .center
-        whereAreYouAS.addAttribute(NSParagraphStyleAttributeName,
+        whereAreYouAS.addAttribute(NSAttributedStringKey.paragraphStyle,
                                    value: paragraph,
                                    range: allStringRange)
         
         // Creating a bold face for a given part of the string
-        whereAreYouAS.addAttribute(NSFontAttributeName,
+        whereAreYouAS.addAttribute(NSAttributedStringKey.font,
                                    value: Constants.WhereAreYouBoldFont,
                                    range: foundRange)
         
